@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en" class="light-mode">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Todo List Application</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">To-Do List</h2>
+                <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark mode">
+                    <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="card-content">
+                <!-- Task Form -->
+                <div class="task-form">
+                    <div class="input-row">
+                        <input type="text" id="taskInput" placeholder="Add a new task..." class="input">
+                    </div>
+                    
+                    <div class="input-row">
+                        <div class="form-group">
+                            <select id="categorySelect" class="select">
+                                <option value="">-- Category --</option>
+                                <option value="Work">Work</option>
+                                <option value="Personal">Personal</option>
+                                <option value="School">School</option>
+                                <option value="Shopping">Shopping</option>
+                                <option value="Health">Health</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <select id="prioritySelect" class="select">
+                                <option value="">-- Priority --</option>
+                                <option value="Low">Low</option>
+                                <option value="Medium">Medium</option>
+                                <option value="High">High</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <input type="date" id="dueDateInput" class="input">
+                        </div>
+                    </div>
+                    
+                    <div class="input-row">
+                        <textarea id="taskNotes" placeholder="Add notes (optional)" class="textarea"></textarea>
+                    </div>
+                    
+                    <div class="input-row">
+                        <button id="addButton" class="button">Add Task</button>
+                    </div>
+                </div>
+                
+                <!-- Filters -->
+                <div class="filters-container">
+                    <div class="filters-header">
+                        <h3>Filter & Sort</h3>
+                        <button id="clearFilters" class="button-small">Clear Filters</button>
+                    </div>
+                    
+                    <div class="filters-body">
+                        <div class="filter-group">
+                            <label for="filterCategory">Category:</label>
+                            <select id="filterCategory" class="select-small">
+                                <option value="">All</option>
+                                <option value="Work">Work</option>
+                                <option value="Personal">Personal</option>
+                                <option value="School">School</option>
+                                <option value="Shopping">Shopping</option>
+                                <option value="Health">Health</option>
+                            </select>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <label for="filterPriority">Priority:</label>
+                            <select id="filterPriority" class="select-small">
+                                <option value="">All</option>
+                                <option value="Low">Low</option>
+                                <option value="Medium">Medium</option>
+                                <option value="High">High</option>
+                            </select>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <label for="filterStatus">Status:</label>
+                            <select id="filterStatus" class="select-small">
+                                <option value="">All</option>
+                                <option value="pending">Pending</option>
+                                <option value="completed">Completed</option>
+                            </select>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <label for="sortBy">Sort By:</label>
+                            <select id="sortBy" class="select-small">
+                                <option value="dateAdded">Date Added</option>
+                                <option value="dueDate">Due Date</option>
+                                <option value="priority">Priority</option>
+                                <option value="alphabetical">Alphabetical</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="taskList" class="task-list">
+                    <!-- Tasks will be dynamically inserted here -->
+                    <p id="emptyMessage" class="empty-message">No tasks yet. Add one above!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Task template -->
+    <template id="taskTemplate">
+        <div class="task-item">
+            <div class="task-header">
+                <div class="task-checkbox-label">
+                    <input type="checkbox" class="checkbox">
+                    <label class="task-label"></label>
+                </div>
+                <div class="task-badges">
+                    <span class="badge category-badge"></span>
+                    <span class="badge priority-badge"></span>
+                    <span class="badge date-badge"></span>
+                </div>
+            </div>
+            
+            <div class="task-details">
+                <p class="task-notes"></p>
+            </div>
+            
+            <div class="task-actions">
+                <button class="button-icon expand-button" aria-label="Expand/collapse details">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </button>
+                <button class="button-icon edit-button" aria-label="Edit task">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                    </svg>
+                </button>
+                <button class="button-icon delete-button" aria-label="Delete task">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 6h18"></path>
+                        <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                        <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                        <line x1="10" y1="11" x2="10" y2="17"></line>
+                        <line x1="14" y1="11" x2="14" y2="17"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </template>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Confirm Deletion</h3>
+                <button class="close-button" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this task?</p>
+                <p class="task-to-delete"></p>
+            </div>
+            <div class="modal-footer">
+                <button class="button button-secondary" id="cancelDelete">Cancel</button>
+                <button class="button button-danger" id="confirmDelete">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Task Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit Task</h3>
+                <button class="close-button" id="closeEditModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="input-row">
+                    <input type="text" id="editTaskInput" placeholder="Task title" class="input">
+                </div>
+                
+                <div class="input-row">
+                    <div class="form-group">
+                        <label for="editCategorySelect">Category:</label>
+                        <select id="editCategorySelect" class="select">
+                            <option value="">-- Category --</option>
+                            <option value="Work">Work</option>
+                            <option value="Personal">Personal</option>
+                            <option value="School">School</option>
+                            <option value="Shopping">Shopping</option>
+                            <option value="Health">Health</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="editPrioritySelect">Priority:</label>
+                        <select id="editPrioritySelect" class="select">
+                            <option value="">-- Priority --</option>
+                            <option value="Low">Low</option>
+                            <option value="Medium">Medium</option>
+                            <option value="High">High</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="input-row">
+                    <div class="form-group">
+                        <label for="editDueDateInput">Due Date:</label>
+                        <input type="date" id="editDueDateInput" class="input">
+                    </div>
+                </div>
+                
+                <div class="input-row">
+                    <label for="editTaskNotes">Notes:</label>
+                    <textarea id="editTaskNotes" placeholder="Add notes (optional)" class="textarea"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="button button-secondary" id="cancelEdit">Cancel</button>
+                <button class="button" id="saveEdit">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

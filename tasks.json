@@ -1,0 +1,22 @@
+[
+    {
+        "id": 1742696345862,
+        "text": "Jump",
+        "category": "Personal",
+        "priority": "Medium",
+        "dueDate": "2025-03-23",
+        "notes": "",
+        "completed": true,
+        "dateAdded": "2025-03-23T02:19:05.862Z"
+    },
+    {
+        "id": 1742696361690,
+        "text": "Go to work",
+        "category": "Work",
+        "priority": "High",
+        "dueDate": "2025-03-24",
+        "notes": "",
+        "completed": false,
+        "dateAdded": "2025-03-23T02:19:21.690Z"
+    }
+]
